@@ -1,4 +1,4 @@
-name: 'Github Demo UAT Deploy'
+name: 'Github Demo Dev Deploy'
 on:
   push:
     branches:
@@ -16,14 +16,14 @@ jobs:
     - name: 'Login to Azure with Service Principal'
       uses: azure/login@v1
       with:
-        creds: '{"clientId":"${{ secrets.CLIENT_ID }}","clientSecret":"${{ secrets.CLIENT_SECRET }}","subscriptionId":"${{ secrets.SUBSCRIPTION_ID }}","tenantId":"${{ secrets.TENANT_ID }}"}'
+        creds: ${{ secrets.CREDENTIALS }}
 
     # Deploy Bicep file
     - name: 'Create Azure Resources'
       uses: azure/arm-deploy@v1
       with:
         resourceGroupName: ${{ secrets.RESOURCE_GROUP }}
-        template: ./bicep/main.bicep
+        template: ./src/bicep/main.bicep
         parameters: ./bicep/parameters/uat.json
         failOnStdErr: false
 
