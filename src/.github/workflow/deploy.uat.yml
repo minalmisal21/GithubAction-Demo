@@ -1,0 +1,48 @@
+name: 'Github Demo UAT Deploy'
+on:
+  push:
+    branches:
+      - 'main'
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    environment: uat
+    steps:
+      # Checkout code
+    - uses: actions/checkout@v3
+
+    # Log into Azure
+    - name: 'Login to Azure with Service Principal'
+      uses: azure/login@v1
+      with:
+        creds: '{"clientId":"${{ secrets.CLIENT_ID }}","clientSecret":"${{ secrets.CLIENT_SECRET }}","subscriptionId":"${{ secrets.SUBSCRIPTION_ID }}","tenantId":"${{ secrets.TENANT_ID }}"}'
+
+    # Deploy Bicep file
+    - name: 'Create Azure Resources'
+      uses: azure/arm-deploy@v1
+      with:
+        resourceGroupName: ${{ secrets.RESOURCE_GROUP }}
+        template: ./bicep/main.bicep
+        parameters: ./bicep/parameters/uat.json
+        failOnStdErr: false
+
+    # - name: Install Dotnet
+    #   uses: actions/setup-dotnet@v1
+    #   with:
+    #     dotnet-version: '6.0.402'
+
+    # # Build function app
+    # - name: 'Function app build'
+    #   shell: bash
+    #   run: |
+    #     pushd ./func-faq-applications
+    #     dotnet build --configuration Release --output ./output
+    #     popd
+
+    # # Deploy function code
+    # - name: 'Deploy function'
+    #   uses: Azure/functions-action@v1
+    #   with:
+    #     app-name: func-faq-applications-ae-uat
+    #     package: './func-faq-applications/output'
