@@ -1,168 +1,48 @@
-parameters:
-  - name: vmImage
-    displayName: "VM Image"
-    type: string
-    default: "ubuntu-latest"
-  - name: deployIAC
-    displayName: deploy Infrastructure As Code
-    type: boolean
-    default: false
-  - name: deployCommonLogicApps
-    displayName: deploy Logic apps - Integration Framework
-    type: boolean
-    default: false
-  - name: deployAPIConnections
-    displayName: deploy API Connections
-    type: boolean
-    default: false
-  - name: deployRBAC
-    displayName: deploy RBAC
-    type: boolean
-    default: false
-  - name: keyvaultManualValidation
-    displayName: keyvault secrets validation
-    type: boolean
-    default: false
-  - name: seedBCConfigInAzTable
-    displayName: Seed BC Configuration in Azure Table
-    type: boolean
-    default: false
-  - name: logicAppState
-    displayName: "LogicApp State"
-    type: string
-    default: "enabled"
+name: 'Github Demo UAT Deploy'
+on:
+  push:
+    branches:
+      - 'main'
 
-trigger: none
-resources:
-  pipelines:
-    - pipeline: bcintegration-build-ref
-      source: "Build-BCIntegration" # Azure Pipelines name of the source pipeline referenced
-      trigger: true
-stages:
-  - stage: dev
-    displayName: "development"
-    dependsOn:
-    pool:
-      vmImage: ${{ parameters.vmImage }}
-    variables:
-      - template: variables/variables.ae.dev.yml
-    jobs:
-      - template: deployment.unit.yml
-        parameters:
-          deployIAC: ${{ parameters.deployIAC }}
-          deployCommonLogicApps: ${{ parameters.deployCommonLogicApps }}
-          deployAPIConnections: ${{ parameters.deployAPIConnections }}
-          deployRBAC: ${{ parameters.deployRBAC }}
-          manualValidation: ${{ parameters.keyvaultManualValidation }}
-          environmentAcronym: ${{ variables.environmentAcronym }}
-          locationAcronym: ${{ variables.locationAcronym }}
-          resourceGroupName: ${{ variables.resourceGroupName }}
-          serviceConnectionName: ${{ variables.serviceConnectionName }}
-          devopsEnvironment: ${{ variables.devopsEnvironment }}
-          devOpsNotificationEmail: ${{ variables.devOpsNotificationEmail }}
-          location: ${{ variables.location }}
-          keyVaultName: ${{ variables.keyVaultName }}
-          serviceEndpoint: ${{ variables.serviceConnectionName }}
-          BCIntegrationFrameworkApiEndpoint: "${{ variables.BCIntegrationFrameworkApiEndpoint }}"
-          BCEnvironment: ${{ variables.BCEnvironment }}
-          devOpsServiceConnectionObjectId: ${{ variables.devOpsServiceConnectionObjectId }}
-          isProduction: ${{ variables.isProduction }}
-          logicAppState: ${{ parameters.logicAppState }}
-          clientIdentifier: ${{ variables.clientIdentifier }}
-          seedBCConfigInAzTable: ${{ parameters.seedBCConfigInAzTable }}
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    #environment: dev
+    steps:
+      # Checkout code
+    - uses: actions/checkout@v3
 
-  - stage: test
-    displayName: "TEST"
-    dependsOn:
-    pool:
-      vmImage: ${{ parameters.vmImage }}
-    variables:
-      - template: variables/variables.ae.tst.yml
-    jobs:
-      - template: deployment.unit.yml
-        parameters:
-          deployIAC: ${{ parameters.deployIAC }}
-          deployCommonLogicApps: ${{ parameters.deployCommonLogicApps }}
-          deployAPIConnections: ${{ parameters.deployAPIConnections }}
-          deployRBAC: ${{ parameters.deployRBAC }}
-          manualValidation: ${{ parameters.keyvaultManualValidation }}
-          environmentAcronym: ${{ variables.environmentAcronym }}
-          locationAcronym: ${{ variables.locationAcronym }}
-          resourceGroupName: ${{ variables.resourceGroupName }}
-          serviceConnectionName: ${{ variables.serviceConnectionName }}
-          devopsEnvironment: ${{ variables.devopsEnvironment }}
-          devOpsNotificationEmail: ${{ variables.devOpsNotificationEmail }}
-          location: ${{ variables.location }}
-          keyVaultName: ${{ variables.keyVaultName }}
-          serviceEndpoint: ${{ variables.serviceConnectionName }}
-          BCIntegrationFrameworkApiEndpoint: "${{ variables.BCIntegrationFrameworkApiEndpoint }}"
-          BCEnvironment: ${{ variables.BCEnvironment }}
-          devOpsServiceConnectionObjectId: ${{ variables.devOpsServiceConnectionObjectId }}
-          isProduction: ${{ variables.isProduction }}
-          logicAppState: ${{ parameters.logicAppState }}
-          clientIdentifier: ${{ variables.clientIdentifier }}
-          seedBCConfigInAzTable: ${{ parameters.seedBCConfigInAzTable }}
+    # Log into Azure
+    - name: 'Login to Azure with Service Principal'
+      uses: azure/login@v1
+      with:
+        creds: '{"clientId":"${{ secrets.CLIENT_ID }}","clientSecret":"${{ secrets.CLIENT_SECRET }}","subscriptionId":"${{ secrets.SUBSCRIPTION_ID }}","tenantId":"${{ secrets.TENANT_ID }}"}'
 
-  - stage: uat
-    displayName: "UAT"
-    dependsOn:
-    pool:
-      vmImage: ${{ parameters.vmImage }}
-    variables:
-      - template: variables/variables.ae.uat.yml
-    jobs:
-      - template: deployment.unit.yml
-        parameters:
-          deployIAC: ${{ parameters.deployIAC }}
-          deployCommonLogicApps: ${{ parameters.deployCommonLogicApps }}
-          deployAPIConnections: ${{ parameters.deployAPIConnections }}
-          deployRBAC: ${{ parameters.deployRBAC }}
-          manualValidation: ${{ parameters.keyvaultManualValidation }}
-          environmentAcronym: ${{ variables.environmentAcronym }}
-          locationAcronym: ${{ variables.locationAcronym }}
-          resourceGroupName: ${{ variables.resourceGroupName }}
-          serviceConnectionName: ${{ variables.serviceConnectionName }}
-          devopsEnvironment: ${{ variables.devopsEnvironment }}
-          devOpsNotificationEmail: ${{ variables.devOpsNotificationEmail }}
-          location: ${{ variables.location }}
-          keyVaultName: ${{ variables.keyVaultName }}
-          serviceEndpoint: ${{ variables.serviceConnectionName }}
-          BCIntegrationFrameworkApiEndpoint: "${{ variables.BCIntegrationFrameworkApiEndpoint }}"
-          BCEnvironment: ${{ variables.BCEnvironment }}
-          devOpsServiceConnectionObjectId: ${{ variables.devOpsServiceConnectionObjectId }}
-          isProduction: ${{ variables.isProduction }}
-          logicAppState: ${{ parameters.logicAppState }}
-          clientIdentifier: ${{ variables.clientIdentifier }}
-          seedBCConfigInAzTable: ${{ parameters.seedBCConfigInAzTable }}
+    # Deploy Bicep file
+    - name: 'Create Azure Resources'
+      uses: azure/arm-deploy@v1
+      with:
+        resourceGroupName: ${{ secrets.RESOURCE_GROUP }}
+        template: ./bicep/main.bicep
+        parameters: ./bicep/parameters/uat.json
+        failOnStdErr: false
 
-  - stage: prd
-    displayName: "PRD"
-    dependsOn:
-    pool:
-      vmImage: ${{ parameters.vmImage }}
-    variables:
-      - template: variables/variables.ae.prd.yml
-    jobs:
-      - template: deployment.unit.yml
-        parameters:
-          deployIAC: ${{ parameters.deployIAC }}
-          deployCommonLogicApps: ${{ parameters.deployCommonLogicApps }}
-          deployAPIConnections: ${{ parameters.deployAPIConnections }}
-          deployRBAC: ${{ parameters.deployRBAC }}
-          manualValidation: ${{ parameters.keyvaultManualValidation }}
-          environmentAcronym: ${{ variables.environmentAcronym }}
-          locationAcronym: ${{ variables.locationAcronym }}
-          resourceGroupName: ${{ variables.resourceGroupName }}
-          serviceConnectionName: ${{ variables.serviceConnectionName }}
-          devopsEnvironment: ${{ variables.devopsEnvironment }}
-          devOpsNotificationEmail: ${{ variables.devOpsNotificationEmail }}
-          location: ${{ variables.location }}
-          keyVaultName: ${{ variables.keyVaultName }}
-          serviceEndpoint: ${{ variables.serviceConnectionName }}
-          BCIntegrationFrameworkApiEndpoint: "${{ variables.BCIntegrationFrameworkApiEndpoint }}"
-          BCEnvironment: ${{ variables.BCEnvironment }}
-          devOpsServiceConnectionObjectId: ${{ variables.devOpsServiceConnectionObjectId }}
-          isProduction: ${{ variables.isProduction }}
-          logicAppState: ${{ parameters.logicAppState }}
-          clientIdentifier: ${{ variables.clientIdentifier }}
-          seedBCConfigInAzTable: ${{ parameters.seedBCConfigInAzTable }}
+    # - name: Install Dotnet
+    #   uses: actions/setup-dotnet@v1
+    #   with:
+    #     dotnet-version: '6.0.402'
+
+    # # Build function app
+    # - name: 'Function app build'
+    #   shell: bash
+    #   run: |
+    #     pushd ./func-faq-applications
+    #     dotnet build --configuration Release --output ./output
+    #     popd
+
+    # # Deploy function code
+    # - name: 'Deploy function'
+    #   uses: Azure/functions-action@v1
+    #   with:
+    #     app-name: func-faq-applications-ae-uat
+    #     package: './func-faq-applications/output'
