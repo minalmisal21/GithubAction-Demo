@@ -24,7 +24,7 @@ jobs:
       with:
         resourceGroupName: ${{ secrets.RESOURCE_GROUP }}
         template: ./src/bicep/main.bicep
-        parameters: ./bicep/parameters/uat.json
+        parameters: ./src/bicep/parameters/uat.json
         failOnStdErr: false
 
     # - name: Install Dotnet
