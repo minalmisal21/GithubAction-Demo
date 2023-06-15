@@ -2,29 +2,26 @@
   "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
-    "environmentName": {
-      "value": "uat"
+    "resourceGroupName": {
+      "value": "rg-github-demo-uat-ae"
     },
+    "environmentAcronym": {
+      "value": "uat"
+    },    
     "locationAcronym": {
       "value": "ae"
     },
-    "publisherEmail": {
-      "value": "shranal.kumar@theta.co.nz"
+    "devOpsNotificationEmail": {
+      "value": "minal.misal@theta.co.nz"
     },
-    "easyAuthClientId": {
-      "value": "0300c967-9d1a-4900-81c3-67fd51b7c957"
+    "location": {
+      "value": "AustraliaEast"
     },
-    "salesforceServiceUrl": {
-      "value": "https://educationnz--uat.sandbox.my.salesforce.com/services"
-    },
-    "backendAppId": {
-      "value": "a10b21b4-5954-4320-8e5c-cd002ec42eb0"
-    },
-    "rootFormName": {
-      "value": "Application Status UAT"
-    },
-    "contactUsEngagementName": {
-      "value": "Live chat"
+    "devopsEnvironment": {
+      "value": "az-github-integration-non-prod"
+    },    
+    "devOpsServiceConnectionObjectId": {
+      "value": "<todo>"
     }
   }
 }
