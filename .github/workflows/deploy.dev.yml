@@ -1,48 +1,48 @@
-name: 'Github Demo Dev Deploy'
-on:
-  push:
-    branches:
-      - 'main'
+# name: 'Github Demo Dev Deploy'
+# on:
+#   push:
+#     branches:
+#       - 'main'
 
-jobs:
-  build-and-deploy:
-    runs-on: ubuntu-latest
-    environment: dev
-    steps:
-      # Checkout code
-    - uses: actions/checkout@v3
+# jobs:
+#   build-and-deploy:
+#     runs-on: ubuntu-latest
+#     environment: dev
+#     steps:
+#       # Checkout code
+#     - uses: actions/checkout@v3
 
-    # Log into Azure
-    - name: 'Login to Azure with Service Principal'
-      uses: azure/login@v1
-      with:
-        creds: ${{ secrets.CREDENTIALS }}
+#     # Log into Azure
+#     - name: 'Login to Azure with Service Principal'
+#       uses: azure/login@v1
+#       with:
+#         creds: ${{ secrets.CREDENTIALS }}
 
-    # Deploy Bicep file
-    - name: 'Create Azure Resources'
-      uses: azure/arm-deploy@v1
-      with:
-        resourceGroupName: ${{ secrets.RESOURCE_GROUP }}
-        template: ./src/bicep/main.bicep
-        parameters: ./src/bicep/parameters/uat.json
-        failOnStdErr: false
+#     # Deploy Bicep file
+#     - name: 'Create Azure Resources'
+#       uses: azure/arm-deploy@v1
+#       with:
+#         resourceGroupName: ${{ secrets.RESOURCE_GROUP }}
+#         template: ./src/bicep/main.bicep
+#         parameters: ./src/bicep/parameters/uat.json
+#         failOnStdErr: false
 
-    # - name: Install Dotnet
-    #   uses: actions/setup-dotnet@v1
-    #   with:
-    #     dotnet-version: '6.0.402'
+#     # - name: Install Dotnet
+#     #   uses: actions/setup-dotnet@v1
+#     #   with:
+#     #     dotnet-version: '6.0.402'
 
-    # # Build function app
-    # - name: 'Function app build'
-    #   shell: bash
-    #   run: |
-    #     pushd ./func-faq-applications
-    #     dotnet build --configuration Release --output ./output
-    #     popd
+#     # # Build function app
+#     # - name: 'Function app build'
+#     #   shell: bash
+#     #   run: |
+#     #     pushd ./func-faq-applications
+#     #     dotnet build --configuration Release --output ./output
+#     #     popd
 
-    # # Deploy function code
-    # - name: 'Deploy function'
-    #   uses: Azure/functions-action@v1
-    #   with:
-    #     app-name: func-faq-applications-ae-uat
-    #     package: './func-faq-applications/output'
+#     # # Deploy function code
+#     # - name: 'Deploy function'
+#     #   uses: Azure/functions-action@v1
+#     #   with:
+#     #     app-name: func-faq-applications-ae-uat
+#     #     package: './func-faq-applications/output'
