@@ -1,0 +1,8 @@
+variables:  
+  devopsEnvironment: 'az-github-integration-non-prod'
+  location: 'AustraliaEast'
+  resourceGroupName: 'rg-github-demo-uat-ae'
+  environmentAcronym: 'uat'
+  locationAcronym: 'ae'
+  devOpsNotificationEmail: 'minal.misal@thet.co.nz'
+  devOpsServiceConnectionObjectId: '<todo>'
