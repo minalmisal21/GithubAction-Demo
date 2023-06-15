@@ -23,8 +23,8 @@ jobs:
       uses: azure/arm-deploy@v1
       with:
         resourceGroupName: ${{ secrets.RESOURCE_GROUP }}
-        template: ./bicep/main.bicep
-        parameters: ./bicep/parameters/uat.json
+        template: ./src/bicep/main.bicep
+        parameters: ./src/bicep/parameters/uat.json
         failOnStdErr: false
 
     # - name: Install Dotnet
