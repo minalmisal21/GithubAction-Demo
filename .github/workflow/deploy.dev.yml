@@ -7,7 +7,7 @@ on:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-    #environment: dev
+    environment: dev
     steps:
       # Checkout code
     - uses: actions/checkout@v3
