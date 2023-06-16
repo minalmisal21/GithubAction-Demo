@@ -52,15 +52,15 @@ var tagValues = {
 //   }
 // }
 
-// module module_iac_storage 'iac/storageaccount.bicep' = if (deployIAC) {
-//   name: 'module_iac_storage_${currentDateTime}'
-//   params: {
-//     environmentAcronym: environmentAcronym
-//     location: location
-//     tagValues: tagValues
-//     clientIdentifier: clientIdentifier
-//   }
-// }
+module module_iac_storage 'iac/storageaccount.bicep' = if (deployIAC) {
+  name: 'module_iac_storage_${currentDateTime}'
+  params: {
+    environmentAcronym: environmentAcronym
+    location: location
+    tagValues: tagValues
+    clientIdentifier: clientIdentifier
+  }
+}
 
 module module_iac_log_analytics 'iac/loganalytics.bicep' = if (deployIAC) {
   name: 'module_iac_log_analytics_${currentDateTime}'
