@@ -2,29 +2,17 @@
   "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
-    "resourceGroupName": {
-      "value": "rg-github-demo-uat-ae"
-    },
     "environmentAcronym": {
       "value": "uat"
     },    
     "locationAcronym": {
       "value": "ae"
     },
-    "devOpsNotificationEmail": {
-      "value": "minal.misal@theta.co.nz"
-    },
     "location": {
       "value": "AustraliaEast"
     },
-    "devopsEnvironment": {
-      "value": "az-github-integration-non-prod"
-    },    
-    "devOpsServiceConnectionObjectId": {
-      "value": "<todo>"
-    },
     "clientIdentifier": {
       "value": "demo"
-    }
+    }    
   }
 }
