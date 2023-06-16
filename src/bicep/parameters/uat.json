@@ -22,6 +22,9 @@
     },    
     "devOpsServiceConnectionObjectId": {
       "value": "<todo>"
+    },
+    "clientIdentifier": {
+      "value": "demo"
     }
   }
 }
