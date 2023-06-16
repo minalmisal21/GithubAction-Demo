@@ -3,7 +3,8 @@ on:
   push:
     branches:
       - 'main'
-  worflow_dispatch:
+      
+  workflow_dispatch:
     deployIAC:
       description: 'To deploy IAC'
       required: false
