@@ -1,4 +1,4 @@
-param deployIAC bool = false
+param deployIAC bool = true
 // param deployAPI bool = false
 // param deployAPIConnections bool = false
 // param deployRBAC bool = false
