@@ -1,26 +1,26 @@
 param deployIAC bool = false
-param deployAPI bool = false
-param deployAPIConnections bool = false
-param deployRBAC bool = false
-param deployCommonLogicApps bool = false
-param addKvAccessPolicies bool = false
-param isProduction bool
-param devOpsServiceConnectionObjectId string
+// param deployAPI bool = false
+// param deployAPIConnections bool = false
+// param deployRBAC bool = false
+// param deployCommonLogicApps bool = false
+// param addKvAccessPolicies bool = false
+// param isProduction bool
+// param devOpsServiceConnectionObjectId string
 
 param environmentAcronym string
-param environmentAcronymOPDG string
+// param environmentAcronymOPDG string
 param locationAcronym string
 param clientIdentifier string
 
-param BCIntegrationFrameworkApiEndpoint string
-param BCEnvironment string
+// param BCIntegrationFrameworkApiEndpoint string
+// param BCEnvironment string
 
 param location string = resourceGroup().location
 param currentDateTime string = utcNow('yyyy-MM-dd-HHmmss')
 
-param appServerId string
-param apimAppId string
-param apimSigToken string
+// param appServerId string
+// param apimAppId string
+// param apimSigToken string
 
 var tagValues = {
   CreatedBy: 'Hawk-AzureDevOps'
