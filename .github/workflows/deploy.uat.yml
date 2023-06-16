@@ -16,7 +16,6 @@ jobs:
     runs-on: ubuntu-latest
     environment: uat
     
-    if: ${{ parameters.deployIAC }}
     steps:
       # Checkout code
       - uses: actions/checkout@v3
