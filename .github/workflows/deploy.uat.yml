@@ -3,12 +3,13 @@ on:
   push:
     branches:
       - 'main'
-      
+
   workflow_dispatch:
-    deployIAC:
-      description: 'To deploy IAC'
-      required: false
-      type: boolean
+    inputs:
+      deployIAC:
+        description: 'To deploy IAC'
+        required: false
+        type: boolean
   
 jobs:
   build-and-deploy:
