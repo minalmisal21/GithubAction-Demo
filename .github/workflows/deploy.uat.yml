@@ -3,7 +3,12 @@ on:
   push:
     branches:
       - 'main'
-
+  worflow_dispatch:
+    deployIAC:
+      description: 'To deploy IAC'
+      required: false
+      type: boolean
+  
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
@@ -26,6 +31,8 @@ jobs:
         template: ./src/bicep/main.bicep
         parameters: ./src/bicep/parameters/uat.json
         failOnStdErr: false
+        condition: and(succeeded(), or(${{ parameters.deployIAC }} ))
+
 
     # - name: Install Dotnet
     #   uses: actions/setup-dotnet@v1
