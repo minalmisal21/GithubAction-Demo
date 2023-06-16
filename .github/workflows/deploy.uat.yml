@@ -28,6 +28,7 @@ jobs:
 
       # Deploy Bicep file
       - name: 'Create Azure Resources'
+        if: ${{ inputs.deployIAC }} 
         uses: azure/arm-deploy@v1
         with:
           resourceGroupName: ${{ secrets.RESOURCE_GROUP }}
