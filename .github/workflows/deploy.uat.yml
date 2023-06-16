@@ -33,7 +33,7 @@ jobs:
         template: ./src/bicep/main.bicep
         parameters: ./src/bicep/parameters/uat.json
         failOnStdErr: false
-        condition: and(succeeded(), or(${{ parameters.deployIAC }} ))
+        #condition: and(succeeded(), or(${{ parameters.deployIAC }} ))
 
 
     # - name: Install Dotnet
